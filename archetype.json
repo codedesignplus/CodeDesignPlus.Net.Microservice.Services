@@ -1,0 +1,10 @@
+{
+  "microservice": "Services",
+  "description": "Custom Microservice",
+  "version": "1.0.0",
+  "organization": "CodeDesignPlus",
+  "aggregate": "Service",
+  "vault": "security-codedesignplus",
+  "contactName": "CodeDesignPlus",
+  "contactEmail": "support@codedesignplus.com"
+}
