@@ -176,7 +176,7 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         AddEvent(ActionRemovedDomainEvent.Create(Id, controller.Id, action.Id, action.Name, action.Description, action.HttpMethod));
     }
 
-    public void Remove(Guid removedBy)
+    public void Delete(Guid removedBy)
     {
         IsActive = false;
         UpdatedBy = removedBy;

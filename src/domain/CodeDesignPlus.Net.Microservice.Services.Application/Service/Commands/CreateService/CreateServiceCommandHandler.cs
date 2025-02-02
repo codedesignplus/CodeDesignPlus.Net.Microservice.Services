@@ -2,8 +2,18 @@ namespace CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.
 
 public class CreateServiceCommandHandler(IServiceRepository repository, IUserContext user, IPubSub pubsub) : IRequestHandler<CreateServiceCommand>
 {
-    public Task Handle(CreateServiceCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateServiceCommand request, CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        ApplicationGuard.IsNull(request, Errors.InvalidRequest);
+
+        var exist = await repository.ExistsAsync<ServiceAggregate>(request.Id, user.Tenant, cancellationToken);
+
+        ApplicationGuard.IsTrue(exist, Errors.ServiceAlreadyExists);
+
+        var service = ServiceAggregate.Create(request.Id, request.Name, request.Description, user.IdUser);
+
+        await repository.CreateAsync(service, cancellationToken);
+
+        await pubsub.PublishAsync(service.GetAndClearEvents(), cancellationToken);
     }
 }

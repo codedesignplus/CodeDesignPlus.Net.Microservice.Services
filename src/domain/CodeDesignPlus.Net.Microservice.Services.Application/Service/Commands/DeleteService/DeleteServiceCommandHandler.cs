@@ -2,8 +2,19 @@ namespace CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.
 
 public class DeleteServiceCommandHandler(IServiceRepository repository, IUserContext user, IPubSub pubsub) : IRequestHandler<DeleteServiceCommand>
 {
-    public Task Handle(DeleteServiceCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteServiceCommand request, CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        ApplicationGuard.IsNull(request, Errors.InvalidRequest);
+
+        var aggregate = await repository.FindAsync<ServiceAggregate>(request.Id, cancellationToken);
+
+        ApplicationGuard.IsNull(aggregate, Errors.ServiceNotFound);
+
+        aggregate.Delete(user.IdUser);
+        
+        // TODO: remove guid.Empty
+        await repository.DeleteAsync<ServiceAggregate>(aggregate.Id, Guid.Empty, cancellationToken);
+
+        await pubsub.PublishAsync(aggregate.GetAndClearEvents(), cancellationToken);
     }
 }
