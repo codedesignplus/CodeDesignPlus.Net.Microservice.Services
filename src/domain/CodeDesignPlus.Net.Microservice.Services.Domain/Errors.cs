@@ -3,7 +3,6 @@ namespace CodeDesignPlus.Net.Microservice.Services.Domain;
 public class Errors: IErrorCodes
 {    
     public const string UnknownError = "100 : UnknownError";
-
     public const string InvalidId = "101 : Invalid Id";
     public const string InvalidName = "102 : Invalid Name"; 
     public const string InvalidDescription = "103 : Invalid Description"; 
