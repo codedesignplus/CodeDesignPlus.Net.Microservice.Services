@@ -12,7 +12,7 @@ public class Validator : AbstractValidator<UpdateActionCommand>
         RuleFor(x => x.IdService).NotEmpty().NotNull();
         RuleFor(x => x.IdController).NotEmpty().NotNull();
         RuleFor(x => x.IdAction).NotEmpty().NotNull();
-        RuleFor(x => x.Name).NotEmpty().NotNull();
-        RuleFor(x => x.Description).NotEmpty().NotNull();
+        RuleFor(x => x.Name).NotEmpty().NotNull().MaximumLength(128);
+        RuleFor(x => x.Description).NotEmpty().NotNull().MaximumLength(512);
     }
 }
