@@ -6,7 +6,7 @@ public class CreateServiceCommandHandler(IServiceRepository repository, IUserCon
     {
         ApplicationGuard.IsNull(request, Errors.InvalidRequest);
 
-        var exist = await repository.ExistsAsync<ServiceAggregate>(request.Id, user.Tenant, cancellationToken);
+        var exist = await repository.ExistsAsync<ServiceAggregate>(request.Id, cancellationToken);
 
         ApplicationGuard.IsTrue(exist, Errors.ServiceAlreadyExists);
 
