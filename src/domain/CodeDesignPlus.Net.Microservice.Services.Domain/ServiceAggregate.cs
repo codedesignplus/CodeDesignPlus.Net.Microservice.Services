@@ -103,7 +103,7 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         AddEvent(ControllerRemovedDomainEvent.Create(Id, controller.Id, controller.Name, controller.Description));
     }
 
-    public void AddAction(Guid idController, Guid idAction, string name, string description, HttpMethodEnum httpMethod, Guid updatedBy)
+    public void AddAction(Guid idController, Guid idAction, string name, string description, Enums.HttpMethod httpMethod, Guid updatedBy)
     {
         DomainGuard.GuidIsEmpty(idController, Errors.InvalidControllerId);
         DomainGuard.GuidIsEmpty(idAction, Errors.InvalidActionId);
@@ -130,7 +130,7 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         AddEvent(ActionAddedDomainEvent.Create(Id, controller.Id, action.Id, action.Name, action.Description, action.HttpMethod));
     }
 
-    public void UpdateAction(Guid controllerId, Guid actionId, string name, string description, HttpMethodEnum httpMethod, Guid updatedBy)
+    public void UpdateAction(Guid controllerId, Guid actionId, string name, string description, Enums.HttpMethod httpMethod, Guid updatedBy)
     {
         DomainGuard.GuidIsEmpty(controllerId, Errors.InvalidControllerId);
         DomainGuard.GuidIsEmpty(actionId, Errors.InvalidActionId);

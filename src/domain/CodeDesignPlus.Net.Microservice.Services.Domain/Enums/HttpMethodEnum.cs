@@ -1,6 +1,6 @@
 namespace CodeDesignPlus.Net.Microservice.Services.Domain.Enums;
 
-public enum HttpMethodEnum
+public enum HttpMethod
 {
     None,
     POST,

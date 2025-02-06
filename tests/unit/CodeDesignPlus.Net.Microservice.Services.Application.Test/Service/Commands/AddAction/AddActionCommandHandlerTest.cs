@@ -37,7 +37,7 @@ public class AddActionCommandHandlerTest
     public async Task Handle_ServiceNotFound_ThrowsServiceNotFoundException()
     {
         // Arrange
-        var request = new AddActionCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "TestAction", "TestDescription", Domain.Enums.HttpMethodEnum.GET);
+        var request = new AddActionCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "TestAction", "TestDescription", Domain.Enums.HttpMethod.GET);
 
         var cancellationToken = CancellationToken.None;
 
@@ -62,7 +62,7 @@ public class AddActionCommandHandlerTest
         var idAction = Guid.NewGuid();
         var idUser = Guid.NewGuid();
         var cancellationToken = CancellationToken.None;
-        var request = new AddActionCommand(idService, idController, idAction, "TestAction", "TestDescription", Domain.Enums.HttpMethodEnum.GET);
+        var request = new AddActionCommand(idService, idController, idAction, "TestAction", "TestDescription", Domain.Enums.HttpMethod.GET);
 
         var service = ServiceAggregate.Create(Guid.NewGuid(), "TestService", "Test Description", idUser);
         service.AddController(idController, "TestController", "Test Description", idUser);

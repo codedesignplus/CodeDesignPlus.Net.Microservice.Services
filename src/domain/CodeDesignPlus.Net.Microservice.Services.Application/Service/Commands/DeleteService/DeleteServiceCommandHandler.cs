@@ -12,8 +12,7 @@ public class DeleteServiceCommandHandler(IServiceRepository repository, IUserCon
 
         aggregate.Delete(user.IdUser);
         
-        // TODO: remove guid.Empty
-        await repository.DeleteAsync<ServiceAggregate>(aggregate.Id, Guid.Empty, cancellationToken);
+        await repository.DeleteAsync<ServiceAggregate>(aggregate.Id, cancellationToken);
 
         await pubsub.PublishAsync(aggregate.GetAndClearEvents(), cancellationToken);
     }

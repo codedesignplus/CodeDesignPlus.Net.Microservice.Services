@@ -38,7 +38,7 @@ public class UpdateActionCommandHandlerTest
     public async Task Handle_ServiceNotFound_ThrowsServiceNotFoundException()
     {
         // Arrange
-        var request = new UpdateActionCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "TestAction", "TestDescription", HttpMethodEnum.GET);
+        var request = new UpdateActionCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "TestAction", "TestDescription", Domain.Enums.HttpMethod.GET);
         var cancellationToken = CancellationToken.None;
 
         repositoryMock
@@ -62,12 +62,12 @@ public class UpdateActionCommandHandlerTest
         var idAction = Guid.NewGuid();
         var idUser = Guid.NewGuid();
 
-        var request = new UpdateActionCommand(idService, idController, idAction, "TestAction", "TestDescription", HttpMethodEnum.GET);
+        var request = new UpdateActionCommand(idService, idController, idAction, "TestAction", "TestDescription", Domain.Enums.HttpMethod.GET);
         var cancellationToken = CancellationToken.None;
 
         var service = ServiceAggregate.Create(Guid.NewGuid(), "TestService", "Test Description", idUser);
         service.AddController(idController, "TestController", "Test Description", idUser);
-        service.AddAction(idController, idAction, "TestAction", "Test Description", HttpMethodEnum.POST, idUser);
+        service.AddAction(idController, idAction, "TestAction", "Test Description", Domain.Enums.HttpMethod.POST, idUser);
 
         repositoryMock
             .Setup(repo => repo.FindAsync<ServiceAggregate>(request.IdService, cancellationToken))

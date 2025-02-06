@@ -151,7 +151,7 @@ public class ServiceAggregateTest
         var actionId = Guid.NewGuid();
         var actionName = "Test Action";
         var actionDescription = "Test Action Description";
-        var httpMethod = HttpMethodEnum.GET;
+        var httpMethod = Enums.HttpMethod.GET;
 
         // Act
         serviceAggregate.AddAction(controllerId, actionId, actionName, actionDescription, httpMethod, updatedBy);
@@ -185,12 +185,12 @@ public class ServiceAggregateTest
         var actionId = Guid.NewGuid();
         var actionName = "Test Action";
         var actionDescription = "Test Action Description";
-        var httpMethod = HttpMethodEnum.GET;
+        var httpMethod = Enums.HttpMethod.GET;
         serviceAggregate.AddAction(controllerId, actionId, actionName, actionDescription, httpMethod, updatedBy);
 
         var newActionName = "Updated Action";
         var newActionDescription = "Updated Action Description";
-        var newHttpMethod = HttpMethodEnum.POST;
+        var newHttpMethod = Enums.HttpMethod.POST;
 
         // Act
         serviceAggregate.UpdateAction(controllerId, actionId, newActionName, newActionDescription, newHttpMethod, updatedBy);
@@ -222,7 +222,7 @@ public class ServiceAggregateTest
         var actionId = Guid.NewGuid();
         var actionName = "Test Action";
         var actionDescription = "Test Action Description";
-        var httpMethod = HttpMethodEnum.GET;
+        var httpMethod = Enums.HttpMethod.GET;
         serviceAggregate.AddAction(controllerId, actionId, actionName, actionDescription, httpMethod, updatedBy);
 
         // Act

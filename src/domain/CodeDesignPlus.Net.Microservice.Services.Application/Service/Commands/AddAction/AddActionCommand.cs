@@ -3,7 +3,7 @@ using CodeDesignPlus.Net.Microservice.Services.Domain.Enums;
 namespace CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.AddAction;
 
 [DtoGenerator]
-public record AddActionCommand(Guid IdService, Guid IdController, Guid IdAction, string Name, string Description, HttpMethodEnum HttpMethod) : IRequest;
+public record AddActionCommand(Guid IdService, Guid IdController, Guid IdAction, string Name, string Description, Domain.Enums.HttpMethod HttpMethod) : IRequest;
 
 public class Validator : AbstractValidator<AddActionCommand>
 {

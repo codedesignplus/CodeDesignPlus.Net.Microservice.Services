@@ -74,7 +74,7 @@ public class DeleteServiceCommandHandlerTest
         await handler.Handle(request, cancellationToken);
 
         // Assert        
-        repositoryMock.Verify(repo => repo.DeleteAsync<ServiceAggregate>(request.Id, It.IsAny<Guid>(), cancellationToken), Times.Once);
+        repositoryMock.Verify(repo => repo.DeleteAsync<ServiceAggregate>(request.Id, cancellationToken), Times.Once);
         pubSubMock.Verify(pubsub => pubsub.PublishAsync(It.IsAny<List<ServiceDeletedDomainEvent>>(), cancellationToken), Times.AtMostOnce);
     }
 }

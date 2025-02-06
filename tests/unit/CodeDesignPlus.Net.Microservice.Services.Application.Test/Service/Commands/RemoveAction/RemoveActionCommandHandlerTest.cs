@@ -69,7 +69,7 @@ public class RemoveActionCommandHandlerTest
 
         var service = ServiceAggregate.Create(idService, "TestService", "Test Description", idUser);
         service.AddController(idController, "TestController", "Test Description", idUser);
-        service.AddAction(idController, idAction, "TestAction", "Test Description", HttpMethodEnum.GET, idUser);
+        service.AddAction(idController, idAction, "TestAction", "Test Description", Domain.Enums.HttpMethod.GET, idUser);
 
         repositoryMock
             .Setup(repo => repo.FindAsync<ServiceAggregate>(request.IdService, cancellationToken))

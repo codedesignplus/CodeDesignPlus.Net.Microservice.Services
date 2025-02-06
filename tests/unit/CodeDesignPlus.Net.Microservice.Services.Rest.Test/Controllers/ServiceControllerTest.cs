@@ -117,7 +117,7 @@ public class ServiceControllerTest
         var idController = Guid.NewGuid();
         var data = new AddActionDto();
         var cancellationToken = new CancellationToken();
-        var command = new AddActionCommand(id, idController, Guid.NewGuid(), "TestAction", "Test Description", Domain.Enums.HttpMethodEnum.GET);
+        var command = new AddActionCommand(id, idController, Guid.NewGuid(), "TestAction", "Test Description", Domain.Enums.HttpMethod.GET);
         mapperMock.Setup(m => m.Map<AddActionCommand>(data)).Returns(command);
         mediatorMock.Setup(m => m.Send(command, cancellationToken)).Returns(Task.CompletedTask);
 
@@ -180,7 +180,7 @@ public class ServiceControllerTest
         var idAction = Guid.NewGuid();
         var data = new UpdateActionDto();
         var cancellationToken = new CancellationToken();
-        var command = new UpdateActionCommand(id, idController, idAction, "TestAction", "Test Description", Domain.Enums.HttpMethodEnum.GET);
+        var command = new UpdateActionCommand(id, idController, idAction, "TestAction", "Test Description", Domain.Enums.HttpMethod.GET);
         mapperMock.Setup(m => m.Map<UpdateActionCommand>(data)).Returns(command);
         mediatorMock.Setup(m => m.Send(command, cancellationToken)).Returns(Task.CompletedTask);
 
