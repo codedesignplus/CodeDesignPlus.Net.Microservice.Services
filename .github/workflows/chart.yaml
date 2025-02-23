@@ -16,6 +16,6 @@ jobs:
   ci:
     uses: codedesignplus/workflows/.github/workflows/helm-chart.yaml@main
     with:
-      project-name: CodeDesignPlus.Net.Microservice.Roles
-      microservice-name: ms-roles
+      project-name: CodeDesignPlus.Net.Microservice.Services
+      microservice-name: ms-services
     secrets: inherit
