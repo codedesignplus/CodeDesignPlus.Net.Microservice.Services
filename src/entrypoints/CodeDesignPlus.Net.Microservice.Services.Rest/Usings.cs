@@ -32,3 +32,6 @@ global using CodeDesignPlus.Net.Microservice.Services.Application.Service.Comman
 global using CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.AddAction;
 global using CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.UpdateAction;
 global using CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.RemoveAction;
+global using CodeDesignPlus.Net.Microservice.Services.Application.Service.Queries.GetServiceByName;
+global using CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.AddControllers;
+global using CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.AddActions;

@@ -7,5 +7,16 @@ public class ServiceRepository(IServiceProvider serviceProvider, IOptions<MongoO
 
     : RepositoryBase(serviceProvider, mongoOptions, logger), IServiceRepository
 {
+    public async Task<ServiceAggregate> FindServiceByNameAsync(string name, CancellationToken cancellationToken)
+    {
+        var collection = base.GetCollection<ServiceAggregate>();
 
+        var filter = Builders<ServiceAggregate>.Filter.Eq(x => x.Name, name);
+
+        var cursor = await collection.FindAsync(filter, cancellationToken: cancellationToken);
+
+        var service = await cursor.FirstOrDefaultAsync(cancellationToken);
+
+        return service;
+    }
 }
