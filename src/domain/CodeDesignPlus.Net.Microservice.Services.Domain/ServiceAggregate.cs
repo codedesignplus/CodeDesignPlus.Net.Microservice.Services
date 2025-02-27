@@ -55,6 +55,9 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         UpdatedBy = updatedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
 
+        if (Controllers.Any(x => x.Name == name))
+            return;
+        
         var controller = new ControllerEntity()
         {
             Id = id,
@@ -64,7 +67,7 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
 
         Controllers.Add(controller);
 
-        AddEvent(ControllerAddedDomainEvent.Create(Id, controller.Id, controller.Name, controller.Description));
+        AddEvent(ControllerAddedDomainEvent.Create(Id, controller.Id, controller.Name, controller.Description));    
     }
 
     public void UpdateController(Guid idController, string name, string description, Guid updatedBy)
@@ -117,6 +120,9 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         UpdatedBy = updatedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
 
+        if (controller.Actions.Any(x => x.Name == name))
+            return;
+
         var action = new ActionEntity()
         {
             Id = idAction,
@@ -144,7 +150,7 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         var action = controller.Actions.FirstOrDefault(x => x.Id == actionId);
 
         DomainGuard.IsNull(action, Errors.ActionNotFound);
-        
+
         UpdatedBy = updatedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
 
@@ -167,7 +173,7 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         var action = controller.Actions.FirstOrDefault(x => x.Id == actionId);
 
         DomainGuard.IsNull(action, Errors.ActionNotFound);
-        
+
         UpdatedBy = removedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
 

@@ -43,7 +43,7 @@ var app = builder.Build();
 
 app.UseAuth();
 
-app.MapGrpcService<ServiceService>().RequireAuthorization();
+app.MapGrpcService<ServiceService>();
 
 if (app.Environment.IsDevelopment())
 {

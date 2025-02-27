@@ -2,13 +2,13 @@ ms-base:
   replicaCount: 1
 
   image:
-    repository: codedesignplus/ms-services-rest
+    repository: codedesignplus/ms-services-grpc
     pullPolicy: IfNotPresent
     tag: "v0.1.0-alpha.100"
 
   imagePullSecrets: []
-  fullnameOverride: "ms-services"
-  nameOverride: "ms-services"
+  fullnameOverride: "ms-services-grpc"
+  nameOverride: "ms-services-grpc"
 
   serviceAccount:
     create: true
@@ -91,20 +91,4 @@ ms-base:
   affinity: {}
 
   virtualService: 
-    create: true
-    hosts:
-      - services.codedesignplus.com
-    gateways:
-      - services-gateway
-    http:
-    - name: ms-services
-      match:
-      - uri:
-          prefix: /ms-services/
-      rewrite:
-        uri: /
-      route:
-      - destination:
-          host: ms-services.default.svc.cluster.local
-          port:
-            number: 5000
+    create: false
