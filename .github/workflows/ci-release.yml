@@ -40,7 +40,7 @@ jobs:
       project-name: CodeDesignPlus.Net.Microservice.Services
       microservice-name: ms-services
       enable-rest: true
-      enable-grpc: false
+      enable-grpc: true
       enable-worker: false
       environment: Dev
     secrets: inherit
