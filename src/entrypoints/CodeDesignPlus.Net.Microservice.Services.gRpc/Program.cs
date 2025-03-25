@@ -41,6 +41,11 @@ builder.Services.AddCache(builder.Configuration);
 
 var app = builder.Build();
 
+app.UseCors(builder => builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+);
 app.UseAuth();
 
 app.MapGrpcService<ServiceService>();
