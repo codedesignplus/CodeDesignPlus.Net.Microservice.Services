@@ -49,7 +49,6 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
     {
         DomainGuard.GuidIsEmpty(id, Errors.InvalidControllerId);
         DomainGuard.IsNullOrEmpty(name, Errors.InvalidControllerName);
-        DomainGuard.IsNullOrEmpty(description, Errors.InvalidControllerDescription);
 
         UpdatedBy = updatedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
@@ -116,7 +115,6 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         DomainGuard.GuidIsEmpty(idController, Errors.InvalidControllerId);
         DomainGuard.GuidIsEmpty(idAction, Errors.InvalidActionId);
         DomainGuard.IsNullOrEmpty(Name, Errors.InvalidActionName);
-        DomainGuard.IsNullOrEmpty(Description, Errors.InvalidActionDescription);
 
         var controller = Controllers.FirstOrDefault(x => x.Id == idController);
 

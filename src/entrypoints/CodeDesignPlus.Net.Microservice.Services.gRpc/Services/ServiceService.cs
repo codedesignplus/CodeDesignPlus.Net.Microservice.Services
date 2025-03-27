@@ -17,11 +17,17 @@ public class ServiceService(IMediator mediator, IMapper mapper) : Service.Servic
     {
         var id = Guid.Parse(request.Service.Id);
 
-        var createCommand = new CreateServiceCommand(id, request.Service.Name, request.Service.Description);
-        await mediator.Send(createCommand);
+        var query = new GetServiceByIdQuery(id);
+        var service = await mediator.Send(query);
+
+        if (service == null)
+        {
+            var createCommand = new CreateServiceCommand(id, request.Service.Name, request.Service.Description);
+            await mediator.Send(createCommand);
+        }
 
         var controllerCommand = new AddControllersCommand(id, mapper.Map<List<ControllerDto>>(request.Service.Controllers));
-        await mediator.Send(controllerCommand);        
+        await mediator.Send(controllerCommand);
 
         foreach (var controller in request.Service.Controllers)
         {
