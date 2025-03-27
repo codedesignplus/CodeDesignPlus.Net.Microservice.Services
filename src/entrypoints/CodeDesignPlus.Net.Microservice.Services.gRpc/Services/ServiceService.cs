@@ -11,20 +11,13 @@ using Google.Protobuf.WellKnownTypes;
 
 namespace CodeDesignPlus.Net.Microservice.Services.gRpc.Services;
 
-public class ServiceService(IMediator mediator, IMapper mapper) : Service.ServiceBase
+public class ServiceService(IMediator mediator, IMapper mapper, ILogger<ServiceService> logger) : Service.ServiceBase
 {
     public override async Task<Empty> CreateService(CreateServiceRequest request, ServerCallContext context)
     {
         var id = Guid.Parse(request.Service.Id);
 
-        var query = new GetServiceByIdQuery(id);
-        var service = await mediator.Send(query);
-
-        if (service == null)
-        {
-            var createCommand = new CreateServiceCommand(id, request.Service.Name, request.Service.Description);
-            await mediator.Send(createCommand);
-        }
+        await CreateServiceAsync(request, id);
 
         var controllerCommand = new AddControllersCommand(id, mapper.Map<List<ControllerDto>>(request.Service.Controllers));
         await mediator.Send(controllerCommand);
@@ -39,6 +32,29 @@ public class ServiceService(IMediator mediator, IMapper mapper) : Service.Servic
         }
 
         return new Empty();
+    }
+
+    private async Task CreateServiceAsync(CreateServiceRequest request, Guid id)
+    {
+        ServiceDto service = null!;
+
+        try
+        {
+            var query = new GetServiceByIdQuery(id);
+            service = await mediator.Send(query);
+        }
+        catch (CodeDesignPlusException ex)
+        {
+            logger.LogWarning(ex, ex.Message);
+        }
+        finally
+        {
+            if (service == null)
+            {
+                var createCommand = new CreateServiceCommand(id, request.Service.Name, request.Service.Description);
+                await mediator.Send(createCommand);
+            }
+        }
     }
 
     public async override Task<GetServiceResponse> GetService(GetServiceRequest request, ServerCallContext context)
