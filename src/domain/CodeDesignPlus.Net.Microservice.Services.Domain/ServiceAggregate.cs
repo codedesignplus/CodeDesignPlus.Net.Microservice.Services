@@ -50,7 +50,6 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         DomainGuard.GuidIsEmpty(id, Errors.InvalidControllerId);
         DomainGuard.IsNullOrEmpty(name, Errors.InvalidControllerName);
         DomainGuard.IsNullOrEmpty(description, Errors.InvalidControllerDescription);
-        DomainGuard.GuidIsEmpty(updatedBy, Errors.InvalidUpdatedBy);
 
         UpdatedBy = updatedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
@@ -106,7 +105,13 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         AddEvent(ControllerRemovedDomainEvent.Create(Id, controller.Id, controller.Name, controller.Description));
     }
 
+
     public void AddAction(Guid idController, Guid idAction, string name, string description, Enums.HttpMethod httpMethod, Guid updatedBy)
+    {
+        this.AddAction(idController, string.Empty, idAction, name, description, httpMethod, updatedBy);
+    }
+
+    public void AddAction(Guid idController, string controllerName, Guid idAction, string name, string description, Enums.HttpMethod httpMethod, Guid updatedBy)
     {
         DomainGuard.GuidIsEmpty(idController, Errors.InvalidControllerId);
         DomainGuard.GuidIsEmpty(idAction, Errors.InvalidActionId);
@@ -114,6 +119,9 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         DomainGuard.IsNullOrEmpty(Description, Errors.InvalidActionDescription);
 
         var controller = Controllers.FirstOrDefault(x => x.Id == idController);
+
+        if(controller is null)
+            controller = Controllers.FirstOrDefault(x => x.Name == controllerName);
 
         DomainGuard.IsNull(controller, Errors.ControllerNotFound);
 

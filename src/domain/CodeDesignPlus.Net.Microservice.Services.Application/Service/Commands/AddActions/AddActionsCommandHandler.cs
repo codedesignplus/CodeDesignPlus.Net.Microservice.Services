@@ -14,7 +14,7 @@ public class AddActionsCommandHandler(IServiceRepository repository, IUserContex
         {
             ApplicationGuard.IsNull(action, Errors.InvalidRequest);
 
-            service.AddAction(request.IdController, action.Id, action.Name, action.Description, action.HttpMethod, user.IdUser);
+            service.AddAction(request.IdController, request.Controller, action.Id, action.Name, action.Description, action.HttpMethod, user.IsAuthenticated ? user.IdUser : Guid.Empty);
         }
 
         await repository.UpdateAsync(service, cancellationToken);

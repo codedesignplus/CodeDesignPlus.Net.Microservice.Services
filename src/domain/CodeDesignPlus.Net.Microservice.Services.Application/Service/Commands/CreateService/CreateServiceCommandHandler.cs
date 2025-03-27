@@ -10,7 +10,7 @@ public class CreateServiceCommandHandler(IServiceRepository repository, IUserCon
 
         ApplicationGuard.IsTrue(exist, Errors.ServiceAlreadyExists);
 
-        var service = ServiceAggregate.Create(request.Id, request.Name, request.Description, user.IdUser);
+        var service = ServiceAggregate.Create(request.Id, request.Name, request.Description, user.IsAuthenticated ? user.IdUser : Guid.Empty);
 
         await repository.CreateAsync(service, cancellationToken);
 

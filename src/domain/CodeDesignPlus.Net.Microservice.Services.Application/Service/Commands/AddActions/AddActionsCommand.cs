@@ -3,7 +3,7 @@ using FluentValidation.Validators;
 namespace CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.AddActions;
 
 [DtoGenerator]
-public record AddActionsCommand(Guid IdService, Guid IdController, List<ActionDto> Actions) : IRequest;
+public record AddActionsCommand(Guid IdService, Guid IdController, string Controller, List<ActionDto> Actions) : IRequest;
 
 public class Validator : AbstractValidator<AddActionsCommand>
 {
@@ -11,6 +11,7 @@ public class Validator : AbstractValidator<AddActionsCommand>
     {
         RuleFor(x => x.IdService).NotEmpty().NotNull();
         RuleFor(x => x.IdController).NotEmpty().NotNull();
+        RuleFor(x => x.Controller).NotEmpty().NotNull();
         RuleFor(x => x.Actions).NotEmpty();
         RuleForEach(x => x.Actions).SetValidator(new ActionDtoValidator());
     }

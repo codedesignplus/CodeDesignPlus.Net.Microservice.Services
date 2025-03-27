@@ -27,7 +27,7 @@ public class ServiceService(IMediator mediator, IMapper mapper) : Service.Servic
         {
             var controllerId = Guid.Parse(controller.Id);
 
-            var actionCommand = new AddActionsCommand(id, controllerId, mapper.Map<List<ActionDto>>(controller.Actions));
+            var actionCommand = new AddActionsCommand(id, controllerId, controller.Name, mapper.Map<List<ActionDto>>(controller.Actions));
 
             await mediator.Send(actionCommand);
         }

@@ -14,7 +14,7 @@ public class AddControllersCommandHandler(IServiceRepository repository, IUserCo
         {
             ApplicationGuard.IsNull(controller, Errors.InvalidRequest);
 
-            service.AddController(controller.Id, controller.Name, controller.Description, user.IdUser);
+            service.AddController(controller.Id, controller.Name, controller.Description, user.IsAuthenticated ? user.IdUser : Guid.Empty);
         }
 
         await repository.UpdateAsync(service, cancellationToken);
