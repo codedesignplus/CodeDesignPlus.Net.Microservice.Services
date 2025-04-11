@@ -9,4 +9,6 @@ public class ServiceDto : IDtoBase
     public required string Description { get; set; } 
 
     public List<ControllerDto> Controllers { get; set; } = [];
+
+    public bool IsActive { get; set; }
 }
