@@ -93,6 +93,7 @@ ms-base:
 
   virtualService: 
     create: true
+    namespace: istio-ingress
     hosts:
       - services.codedesignplus.com
     gateways:
@@ -106,6 +107,6 @@ ms-base:
         uri: /
       route:
       - destination:
-          host: ms-services-rest.default.svc.cluster.local
+          host: ms-services-rest.urbancore.svc.cluster.local
           port:
             number: 5000
