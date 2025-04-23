@@ -11,6 +11,7 @@ using CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.Upda
 using CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.DeleteService;
 using CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.RemoveController;
 using CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.RemoveAction;
+using CodeDesignPlus.Net.Core.Abstractions.Models.Pager;
 
 namespace CodeDesignPlus.Net.Microservice.Services.Rest.Test.Controllers;
 
@@ -34,14 +35,15 @@ public class ServiceControllerTest
         var criteria = new C.Criteria();
         var cancellationToken = new CancellationToken();
         var services = new List<ServiceDto>();
-        mediatorMock.Setup(m => m.Send(It.IsAny<GetAllServiceQuery>(), cancellationToken)).ReturnsAsync(services);
+        var pagination = new Pagination<ServiceDto>(services, 0, 10, 0);
+        mediatorMock.Setup(m => m.Send(It.IsAny<GetAllServiceQuery>(), cancellationToken)).ReturnsAsync(pagination);
 
         // Act
         var result = await controller.GetServices(criteria, cancellationToken);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        Assert.Equal(services, okResult.Value);
+        Assert.Equal(pagination, okResult.Value);
 
         mediatorMock.Verify(m => m.Send(It.IsAny<GetAllServiceQuery>(), cancellationToken), Times.Once);
     }

@@ -1,4 +1,5 @@
 using System;
+using CodeDesignPlus.Net.Core.Abstractions.Models.Pager;
 using CodeDesignPlus.Net.Microservice.Services.Application.Service.Queries.GetAllService;
 
 namespace CodeDesignPlus.Net.Microservice.Services.Application.Test.Service.Queries.GetAllService;
@@ -44,30 +45,39 @@ public class GetAllServiceQueryHandlerTest
         var service1 = ServiceAggregate.Create(Guid.NewGuid(), "TestService", "Test Description", idUser);
         var service2 = ServiceAggregate.Create(Guid.NewGuid(), "TestService", "Test Description", idUser);
 
-        var serviceDto1 = new ServiceDto() {
+        var serviceDto1 = new ServiceDto()
+        {
             Id = service1.Id,
             Name = service1.Name,
             Description = service1.Description
         };
-        var serviceDto2 = new ServiceDto() {
+        var serviceDto2 = new ServiceDto()
+        {
             Id = service2.Id,
             Name = service2.Name,
             Description = service2.Description
         };
 
-        var serviceAggregates = new List<ServiceAggregate> { service1, service2 };
-        var serviceDtos = new List<ServiceDto> { serviceDto1, serviceDto2 };
+        var serviceAggregates = new Pagination<ServiceAggregate>([service1, service2], 2, 10, 0);
+        var serviceDtos = new Pagination<ServiceDto>([serviceDto1, serviceDto2], 2, 10, 0);
 
         repositoryMock.Setup(repo => repo.MatchingAsync<ServiceAggregate>(request.Criteria, cancellationToken))
             .ReturnsAsync(serviceAggregates);
 
-        mapperMock.Setup(mapper => mapper.Map<List<ServiceDto>>(serviceAggregates))
+        mapperMock.Setup(mapper => mapper.Map<Pagination<ServiceDto>>(serviceAggregates))
             .Returns(serviceDtos);
 
         // Act
         var result = await handler.Handle(request, cancellationToken);
 
         // Assert
-        Assert.Equal(serviceDtos, result);
+        foreach (var serviceDto in result.Data)
+        {
+            var itemAggregate = serviceAggregates.Data.FirstOrDefault(x => x.Id == serviceDto.Id);
+
+            Assert.NotNull(itemAggregate);
+            Assert.Equal(serviceDto.Name, itemAggregate.Name);
+            Assert.Equal(serviceDto.Description, itemAggregate.Description);
+        }
     }
 }

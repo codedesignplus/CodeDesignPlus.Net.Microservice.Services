@@ -1,4 +1,5 @@
 using System;
+using CodeDesignPlus.Net.Core.Abstractions.Models.Pager;
 
 namespace CodeDesignPlus.Net.Microservice.Services.Rest.Test.Controllers;
 
@@ -31,11 +32,11 @@ public class ServiceControllerTest : ServerBase<Program>, IClassFixture<Server<P
 
         var json = await response.Content.ReadAsStringAsync();
 
-        var services = JsonSerializer.Deserialize<IEnumerable<ServiceDto>>(json);
+        var services = JsonSerializer.Deserialize<Pagination<ServiceDto>>(json);
 
         Assert.NotNull(services);
-        Assert.NotEmpty(services);
-        Assert.Contains(services, x => x.Id == service.Id);
+        Assert.NotEmpty(services.Data);
+        Assert.Contains(services.Data, x => x.Id == service.Id);
     }
 
     [Fact]
