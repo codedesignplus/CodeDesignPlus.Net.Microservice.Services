@@ -32,7 +32,11 @@ ms-base:
 
   service:
     type: ClusterIP
-    port: 5000
+    ports:
+      - name: rest
+        port: 5000
+        targetPort: rest
+        protocol: TCP
 
   ingress:
     enabled: false

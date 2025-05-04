@@ -31,8 +31,16 @@ ms-base:
     # runAsUser: 1000
 
   service:
-    type: ClusterIP
-    port: 5000
+    type: ClusterIP    
+    ports:
+      - name: rest
+        port: 5000
+        targetPort: rest
+        protocol: TCP
+      - name: grpc
+        port: 5001
+        targetPort: grpc
+        protocol: TCP
 
   ingress:
     enabled: false
