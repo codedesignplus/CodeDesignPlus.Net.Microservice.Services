@@ -43,7 +43,6 @@ builder.Services.AddHealthChecksServices();
 
 var app = builder.Build();
 
-
 app.UseHealthChecks();
 
 app.UseAuth();
