@@ -65,11 +65,11 @@ ms-base:
   livenessProbe:
     httpGet:
       path: /health/live
-      port: http
+      port: rest
   readinessProbe:
     httpGet:
       path: /health/ready
-      port: http
+      port: rest
 
   autoscaling:
     enabled: false
