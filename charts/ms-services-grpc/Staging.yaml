@@ -33,9 +33,9 @@ ms-base:
   service:
     type: ClusterIP
     ports:
-      - name: rest
+      - name: http
         port: 5000
-        targetPort: rest
+        targetPort: http
         protocol: TCP
       - name: grpc
         port: 5001
@@ -69,11 +69,11 @@ ms-base:
   livenessProbe:
     httpGet:
       path: /health/live
-      port: rest
+      port: http
   readinessProbe:
     httpGet:
       path: /health/ready
-      port: rest
+      port: http
 
   autoscaling:
     enabled: false
