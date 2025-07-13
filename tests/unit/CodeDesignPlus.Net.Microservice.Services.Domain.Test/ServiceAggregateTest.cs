@@ -250,6 +250,6 @@ public class ServiceAggregateTest
 
         // Assert
         Assert.False(serviceAggregate.IsActive);
-        Assert.Equal(removedBy, serviceAggregate.UpdatedBy);
+        Assert.Equal(removedBy, serviceAggregate.DeletedBy);
     }
 }

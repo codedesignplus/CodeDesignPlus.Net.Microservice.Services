@@ -77,7 +77,7 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
 
         var controller = Controllers.FirstOrDefault(x => x.Id == idController);
 
-        DomainGuard.IsNull(controller, Errors.ControllerNotFound);
+        DomainGuard.IsNull(controller!, Errors.ControllerNotFound);
 
         UpdatedBy = updatedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
@@ -94,7 +94,7 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
 
         var controller = Controllers.FirstOrDefault(x => x.Id == idController);
 
-        DomainGuard.IsNull(controller, Errors.ControllerNotFound);
+        DomainGuard.IsNull(controller!, Errors.ControllerNotFound);
 
         UpdatedBy = removedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
@@ -121,7 +121,7 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         if(controller is null)
             controller = Controllers.FirstOrDefault(x => x.Name == controllerName);
 
-        DomainGuard.IsNull(controller, Errors.ControllerNotFound);
+        DomainGuard.IsNull(controller!, Errors.ControllerNotFound);
 
         UpdatedBy = updatedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
@@ -151,11 +151,11 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
 
         var controller = Controllers.FirstOrDefault(x => x.Id == controllerId);
 
-        DomainGuard.IsNull(controller, Errors.ControllerNotFound);
+        DomainGuard.IsNull(controller!, Errors.ControllerNotFound);
 
         var action = controller.Actions.FirstOrDefault(x => x.Id == actionId);
 
-        DomainGuard.IsNull(action, Errors.ActionNotFound);
+        DomainGuard.IsNull(action!, Errors.ActionNotFound);
 
         UpdatedBy = updatedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
@@ -174,11 +174,11 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
 
         var controller = Controllers.FirstOrDefault(x => x.Id == controllerId);
 
-        DomainGuard.IsNull(controller, Errors.ControllerNotFound);
+        DomainGuard.IsNull(controller!, Errors.ControllerNotFound);
 
         var action = controller.Actions.FirstOrDefault(x => x.Id == actionId);
 
-        DomainGuard.IsNull(action, Errors.ActionNotFound);
+        DomainGuard.IsNull(action!, Errors.ActionNotFound);
 
         UpdatedBy = removedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
@@ -190,9 +190,10 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
 
     public void Delete(Guid removedBy)
     {
+        IsDeleted = true;
         IsActive = false;
-        UpdatedBy = removedBy;
-        UpdatedAt = SystemClock.Instance.GetCurrentInstant();
+        DeletedBy = removedBy;
+        DeletedAt = SystemClock.Instance.GetCurrentInstant();
 
         AddEvent(ServiceDeletedDomainEvent.Create(Id, Name, Description, IsActive));
     }
