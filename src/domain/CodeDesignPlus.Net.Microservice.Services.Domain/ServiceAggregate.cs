@@ -1,5 +1,4 @@
 using CodeDesignPlus.Net.Microservice.Services.Domain.Entities;
-using CodeDesignPlus.Net.Microservice.Services.Domain.Enums;
 
 namespace CodeDesignPlus.Net.Microservice.Services.Domain;
 
@@ -11,24 +10,24 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
 
     public List<ControllerEntity> Controllers { get; private set; } = [];
 
-    private ServiceAggregate(Guid id, string name, string description, Guid createdBy) : this(id)
-    {
-        Name = name;
-        Description = description;
-        IsActive = true;
-        CreatedBy = createdBy;
-        CreatedAt = SystemClock.Instance.GetCurrentInstant();
-
-        AddEvent(ServiceCreatedDomainEvent.Create(Id, Name, Description, IsActive));
-    }
-
     public static ServiceAggregate Create(Guid id, string name, string description, Guid createdBy)
     {
         DomainGuard.GuidIsEmpty(id, Errors.InvalidId);
         DomainGuard.IsNullOrEmpty(name, Errors.InvalidName);
         DomainGuard.IsNullOrEmpty(description, Errors.InvalidDescription);
 
-        return new ServiceAggregate(id, name, description, createdBy);
+        var aggregate = new ServiceAggregate(id)
+        {
+            Name = name,
+            Description = description,
+            IsActive = true,
+            CreatedBy = createdBy,
+            CreatedAt = SystemClock.Instance.GetCurrentInstant()
+        };
+
+        aggregate.AddEvent(ServiceCreatedDomainEvent.Create(id, name, description, aggregate.IsActive));
+        
+        return aggregate;
     }
 
     public void Update(string name, string description, bool isActive, Guid updatedBy)
