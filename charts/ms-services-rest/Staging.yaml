@@ -101,7 +101,7 @@ ms-base:
     hosts:
       - services.codedesignplus.com
     gateways:
-      - istio-ingress/istio-gateway
+      - istio-ingress/istio-codedesignplus-gateway
     http:
     - name: ms-services
       match:
@@ -111,6 +111,6 @@ ms-base:
         uri: /
       route:
       - destination:
-          host: ms-services-rest.urbancore.svc.cluster.local
+          host: ms-services-rest.codedesignplus.svc.cluster.local
           port:
             number: 5000
