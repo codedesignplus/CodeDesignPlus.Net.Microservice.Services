@@ -1,6 +1,6 @@
 namespace CodeDesignPlus.Net.Microservice.Services.Domain.DomainEvents;
 
-[EventKey<ServiceAggregate>(1, "ServiceUpdatedDomainEvent")]
+[EventKey<ServiceAggregate>(1, "ServiceUpdatedDomainEvent", autoCreate: false)]
 public class ServiceUpdatedDomainEvent(
     Guid aggregateId,
     string name, 
