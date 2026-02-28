@@ -2,7 +2,7 @@ using CodeDesignPlus.Net.Microservice.Services.Domain.Enums;
 
 namespace CodeDesignPlus.Net.Microservice.Services.Domain.DomainEvents;
 
-[EventKey<ServiceAggregate>(1, "ActionRemovedDomainEvent", autoCreate: false)]
+[EventKey<ServiceAggregate>(1, "ActionRemovedDomainEvent")]
 public class ActionRemovedDomainEvent(
     Guid aggregateId,
     Guid idController, 

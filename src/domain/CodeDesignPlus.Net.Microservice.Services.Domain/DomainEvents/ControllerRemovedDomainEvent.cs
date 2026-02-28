@@ -1,6 +1,6 @@
 namespace CodeDesignPlus.Net.Microservice.Services.Domain.DomainEvents;
 
-[EventKey<ServiceAggregate>(1, "ControllerRemovedDomainEvent", autoCreate: false)]
+[EventKey<ServiceAggregate>(1, "ControllerRemovedDomainEvent")]
 public class ControllerRemovedDomainEvent(
      Guid aggregateId,
      Guid idController, 
