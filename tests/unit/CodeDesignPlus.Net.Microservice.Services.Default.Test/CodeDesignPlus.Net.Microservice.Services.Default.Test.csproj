@@ -23,7 +23,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CodeDesignPlus.Net.xUnit.Microservice" Version="0.13.0-beta.12741" />
+    <PackageReference Include="CodeDesignPlus.Net.xUnit.Microservice" Version="0.13.0-beta.12743" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\domain\CodeDesignPlus.Net.Microservice.Services.Infrastructure\CodeDesignPlus.Net.Microservice.Services.Infrastructure.csproj" />
