@@ -3,6 +3,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/domain/", "domain/"]
 COPY ["src/entrypoints/CodeDesignPlus.Net.Microservice.Services.gRpc/", "entrypoints/CodeDesignPlus.Net.Microservice.Services.gRpc/"]
+COPY ["nuget.config", "nuget.config"]
 RUN dotnet restore "./entrypoints/CodeDesignPlus.Net.Microservice.Services.gRpc/CodeDesignPlus.Net.Microservice.Services.gRpc.csproj"
 
 FROM build AS publish
