@@ -1,0 +1,18 @@
+{
+  "language": "fr",
+  "errors": {
+    "100": "Erreur inconnue.",
+    "101": "L'identifiant n'est pas valide.",
+    "102": "Le nom n'est pas valide.",
+    "103": "La description n'est pas valide.",
+    "104": "Le nom du contrôleur n'est pas valide.",
+    "105": "La description du contrôleur n'est pas valide.",
+    "106": "L'identifiant du contrôleur n'est pas valide.",
+    "107": "Contrôleur introuvable.",
+    "108": "L'identifiant de l'auteur de la modification n'est pas valide.",
+    "109": "Le nom de l'action n'est pas valide.",
+    "110": "La description de l'action n'est pas valide.",
+    "111": "L'identifiant de l'action n'est pas valide.",
+    "112": "Action introuvable."
+  }
+}

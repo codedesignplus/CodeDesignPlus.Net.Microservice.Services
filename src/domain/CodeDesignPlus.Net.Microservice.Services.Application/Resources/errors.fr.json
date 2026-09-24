@@ -1,0 +1,9 @@
+{
+  "language": "fr",
+  "errors": {
+    "200": "Erreur inconnue.",
+    "201": "La requête n'est pas valide.",
+    "202": "Ce service existe déjà.",
+    "203": "Service introuvable."
+  }
+}

@@ -1,18 +1,18 @@
 {
   "language": "es",
   "errors": {
-    "100": "",
-    "101": "",
-    "102": "",
-    "103": "",
-    "104": "",
-    "105": "",
-    "106": "",
-    "107": "",
-    "108": "",
-    "109": "",
-    "110": "",
-    "111": "",
-    "112": ""
+    "100": "Error desconocido.",
+    "101": "El identificador no es válido.",
+    "102": "El nombre no es válido.",
+    "103": "La descripción no es válida.",
+    "104": "El nombre del controlador no es válido.",
+    "105": "La descripción del controlador no es válida.",
+    "106": "El identificador del controlador no es válido.",
+    "107": "No encontramos ese controlador.",
+    "108": "El identificador de quien modifica no es válido.",
+    "109": "El nombre de la acción no es válido.",
+    "110": "La descripción de la acción no es válida.",
+    "111": "El identificador de la acción no es válido.",
+    "112": "No encontramos esa acción."
   }
 }
