@@ -1,0 +1,18 @@
+{
+  "language": "en",
+  "errors": {
+    "100": "UnknownError",
+    "101": "Invalid Id",
+    "102": "Invalid Name",
+    "103": "Invalid Description",
+    "104": "Invalid Controller Name",
+    "105": "Invalid Controller Description",
+    "106": "Invalid Controller Id",
+    "107": "Controller Not Found",
+    "108": "Invalid Updated By",
+    "109": "Invalid Action Name",
+    "110": "Invalid Action Description",
+    "111": "Invalid Action Id",
+    "112": "Action Not Found"
+  }
+}
