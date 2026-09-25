@@ -10,6 +10,28 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
 
     public List<ControllerEntity> Controllers { get; private set; } = [];
 
+    /// <summary>
+    /// Sufijo que lleva la clase de C# de un controller y que no forma parte de su nombre de ruta.
+    /// </summary>
+    private const string ControllerSuffix = "Controller";
+
+    /// <summary>
+    /// El nombre con el que se guarda un controller: el de la ruta de ASP.NET, sin el sufijo <c>Controller</c>.
+    /// </summary>
+    /// <remarks>
+    /// Es el que compara el middleware de RBAC (<c>routeData.Values["controller"]</c>) y el que Modulos y RBAC copian de
+    /// este catalogo. Los micros lo envian al arrancar con el nombre de la clase (<c>AccountantController</c>), asi que
+    /// se normaliza aqui, en el dueno del catalogo, y no en cada micro (pendings/012).
+    /// </remarks>
+    public static string CanonicalControllerName(string name)
+    {
+        var trimmed = name?.Trim() ?? string.Empty;
+
+        return trimmed.Length > ControllerSuffix.Length && trimmed.EndsWith(ControllerSuffix, StringComparison.Ordinal)
+            ? trimmed[..^ControllerSuffix.Length]
+            : trimmed;
+    }
+
     public static ServiceAggregate Create(Guid id, string name, string description, Guid createdBy)
     {
         DomainGuard.GuidIsEmpty(id, Errors.InvalidId);
@@ -49,6 +71,8 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         DomainGuard.GuidIsEmpty(id, Errors.InvalidControllerId);
         DomainGuard.IsNullOrEmpty(name, Errors.InvalidControllerName);
 
+        name = CanonicalControllerName(name);
+
         UpdatedBy = updatedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
 
@@ -81,7 +105,7 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
         UpdatedBy = updatedBy;
         UpdatedAt = SystemClock.Instance.GetCurrentInstant();
 
-        controller.Name = name;
+        controller.Name = CanonicalControllerName(name);
         controller.Description = description;
 
         AddEvent(ControllerUpdatedDomainEvent.Create(Id, controller.Id, controller.Name, controller.Description));
@@ -113,12 +137,17 @@ public class ServiceAggregate(Guid id) : AggregateRootBase(id)
     {
         DomainGuard.GuidIsEmpty(idController, Errors.InvalidControllerId);
         DomainGuard.GuidIsEmpty(idAction, Errors.InvalidActionId);
-        DomainGuard.IsNullOrEmpty(Name, Errors.InvalidActionName);
+        DomainGuard.IsNullOrEmpty(name, Errors.InvalidActionName);
 
         var controller = Controllers.FirstOrDefault(x => x.Id == idController);
 
         if(controller is null)
-            controller = Controllers.FirstOrDefault(x => x.Name == controllerName);
+        {
+            // El registro al arrancar manda un id de controller nuevo cada vez: se encuentra por nombre, normalizado igual
+            // que al guardarlo.
+            var canonical = CanonicalControllerName(controllerName);
+            controller = Controllers.FirstOrDefault(x => x.Name == canonical);
+        }
 
         DomainGuard.IsNull(controller!, Errors.ControllerNotFound);
 

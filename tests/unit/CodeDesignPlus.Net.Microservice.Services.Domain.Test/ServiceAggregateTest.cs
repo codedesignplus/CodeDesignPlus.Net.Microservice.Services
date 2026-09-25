@@ -66,7 +66,7 @@ public class ServiceAggregateTest
         var serviceAggregate = ServiceAggregate.Create(id, name, description, createdBy);
 
         var controllerId = Guid.NewGuid();
-        var controllerName = "Test Controller";
+        var controllerName = "Tenant";
         var controllerDescription = "Test Controller Description";
         var updatedBy = Guid.NewGuid();
 
@@ -92,12 +92,12 @@ public class ServiceAggregateTest
         var serviceAggregate = ServiceAggregate.Create(id, name, description, createdBy);
 
         var controllerId = Guid.NewGuid();
-        var controllerName = "Test Controller";
+        var controllerName = "Tenant";
         var controllerDescription = "Test Controller Description";
         var updatedBy = Guid.NewGuid();
         serviceAggregate.AddController(controllerId, controllerName, controllerDescription, updatedBy);
 
-        var newControllerName = "Updated Controller";
+        var newControllerName = "Updated";
         var newControllerDescription = "Updated Controller Description";
 
         // Act
@@ -120,7 +120,7 @@ public class ServiceAggregateTest
         var serviceAggregate = ServiceAggregate.Create(id, name, description, createdBy);
 
         var controllerId = Guid.NewGuid();
-        var controllerName = "Test Controller";
+        var controllerName = "Tenant";
         var controllerDescription = "Test Controller Description";
         var updatedBy = Guid.NewGuid();
         serviceAggregate.AddController(controllerId, controllerName, controllerDescription, updatedBy);
@@ -143,7 +143,7 @@ public class ServiceAggregateTest
         var serviceAggregate = ServiceAggregate.Create(id, name, description, createdBy);
 
         var controllerId = Guid.NewGuid();
-        var controllerName = "Test Controller";
+        var controllerName = "Tenant";
         var controllerDescription = "Test Controller Description";
         var updatedBy = Guid.NewGuid();
         serviceAggregate.AddController(controllerId, controllerName, controllerDescription, updatedBy);
@@ -177,7 +177,7 @@ public class ServiceAggregateTest
         var serviceAggregate = ServiceAggregate.Create(id, name, description, createdBy);
 
         var controllerId = Guid.NewGuid();
-        var controllerName = "Test Controller";
+        var controllerName = "Tenant";
         var controllerDescription = "Test Controller Description";
         var updatedBy = Guid.NewGuid();
         serviceAggregate.AddController(controllerId, controllerName, controllerDescription, updatedBy);
@@ -214,7 +214,7 @@ public class ServiceAggregateTest
         var serviceAggregate = ServiceAggregate.Create(id, name, description, createdBy);
 
         var controllerId = Guid.NewGuid();
-        var controllerName = "Test Controller";
+        var controllerName = "Tenant";
         var controllerDescription = "Test Controller Description";
         var updatedBy = Guid.NewGuid();
         serviceAggregate.AddController(controllerId, controllerName, controllerDescription, updatedBy);
@@ -251,5 +251,77 @@ public class ServiceAggregateTest
         // Assert
         Assert.False(serviceAggregate.IsActive);
         Assert.Equal(removedBy, serviceAggregate.DeletedBy);
+    }
+
+    // --- Nombre de controller canonico (pendings/012) ---------------------------------------------------------------
+
+    [Theory]
+    [InlineData("AccountantController", "Accountant")]
+    [InlineData("Accountant", "Accountant")]
+    [InlineData("  UnitsController ", "Units")]
+    [InlineData("Controller", "Controller")]
+    public void CanonicalControllerName_QuitaSoloElSufijo(string recibido, string esperado)
+    {
+        Assert.Equal(esperado, ServiceAggregate.CanonicalControllerName(recibido));
+    }
+
+    [Fact]
+    public void AddController_NombreConSufijo_GuardaElNombreDeRuta()
+    {
+        var service = ServiceAggregate.Create(Guid.NewGuid(), "ms-accounting", "Accounting", Guid.NewGuid());
+
+        service.AddController(Guid.NewGuid(), "AccountantController", "Accountants", Guid.NewGuid());
+
+        Assert.Equal("Accountant", Assert.Single(service.Controllers).Name);
+    }
+
+    [Fact]
+    public void AddController_ConYSinSufijo_NoDuplica()
+    {
+        var service = ServiceAggregate.Create(Guid.NewGuid(), "ms-accounting", "Accounting", Guid.NewGuid());
+
+        service.AddController(Guid.NewGuid(), "Accountant", "Accountants", Guid.NewGuid());
+        service.AddController(Guid.NewGuid(), "AccountantController", "Accountants", Guid.NewGuid());
+
+        Assert.Single(service.Controllers);
+    }
+
+    [Fact]
+    public void UpdateController_NombreConSufijo_GuardaElNombreDeRuta()
+    {
+        var service = ServiceAggregate.Create(Guid.NewGuid(), "ms-accounting", "Accounting", Guid.NewGuid());
+        var idController = Guid.NewGuid();
+        service.AddController(idController, "Accountant", "Accountants", Guid.NewGuid());
+
+        service.UpdateController(idController, "FiscalAuditorController", "Auditors", Guid.NewGuid());
+
+        Assert.Equal("FiscalAuditor", Assert.Single(service.Controllers).Name);
+    }
+
+    [Fact]
+    public void AddAction_IdDesconocidoYNombreConSufijo_EncuentraElController()
+    {
+        // Asi llega el registro al arrancar: un id de controller nuevo en cada arranque y el nombre de la clase.
+        var service = ServiceAggregate.Create(Guid.NewGuid(), "ms-accounting", "Accounting", Guid.NewGuid());
+        service.AddController(Guid.NewGuid(), "AccountantController", "Accountants", Guid.NewGuid());
+
+        service.AddAction(Guid.NewGuid(), "AccountantController", Guid.NewGuid(), "GetAll", "List", Enums.HttpMethod.GET, Guid.NewGuid());
+
+        Assert.Equal("GetAll", Assert.Single(Assert.Single(service.Controllers).Actions).Name);
+    }
+
+    // --- El guard de AddAction valida el nombre de la accion (pendings/017) -----------------------------------------
+
+    [Fact]
+    public void AddAction_NombreVacio_LanzaInvalidActionName()
+    {
+        var service = ServiceAggregate.Create(Guid.NewGuid(), "ms-accounting", "Accounting", Guid.NewGuid());
+        var idController = Guid.NewGuid();
+        service.AddController(idController, "Accountant", "Accountants", Guid.NewGuid());
+
+        var error = Assert.Throws<CodeDesignPlus.Net.Exceptions.CodeDesignPlusException>(
+            () => service.AddAction(idController, Guid.NewGuid(), string.Empty, "List", Enums.HttpMethod.GET, Guid.NewGuid()));
+
+        Assert.Equal(Errors.InvalidActionName.Code, error.Code);
     }
 }

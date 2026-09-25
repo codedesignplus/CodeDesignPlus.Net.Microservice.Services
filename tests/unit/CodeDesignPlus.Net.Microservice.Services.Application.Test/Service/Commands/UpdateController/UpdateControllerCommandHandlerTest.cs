@@ -79,7 +79,8 @@ public class UpdateControllerCommandHandlerTest
         // Assert
         var controller = service.Controllers.First(x => x.Id == idController);
         
-        Assert.Equal(request.Name, controller.Name);
+        // Se guarda el nombre de ruta, sin el sufijo Controller (pendings/012).
+        Assert.Equal(ServiceAggregate.CanonicalControllerName(request.Name), controller.Name);
         Assert.Equal(request.Description, controller.Description);
         
         repositoryMock.Verify(repo => repo.UpdateAsync(service, cancellationToken), Times.Once);
