@@ -1,6 +1,6 @@
 namespace CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.UpdateController;
 
-public class UpdateControllerCommandHandler(IServiceRepository repository, IUserContext user, IPubSub pubsub) : IRequestHandler<UpdateControllerCommand>
+public class UpdateControllerCommandHandler(IServiceRepository repository, IUserContext user, IPubSub pubsub, ICacheManager cacheManager) : IRequestHandler<UpdateControllerCommand>
 {
     public async Task Handle(UpdateControllerCommand request, CancellationToken cancellationToken)
     {        
@@ -13,6 +13,9 @@ public class UpdateControllerCommandHandler(IServiceRepository repository, IUser
         service.UpdateController(request.IdController,request.Name, request.Description, user.IdUser);
 
         await repository.UpdateAsync(service, cancellationToken);
+
+        // El detalle se cachea en GetServiceById: sin esto se sirve la version anterior (pendings/018).
+        await cacheManager.RemoveAsync(service.Id.ToString());
 
         await pubsub.PublishAsync(service.GetAndClearEvents(), cancellationToken);
     }

@@ -18,7 +18,7 @@ public class RemoveActionCommandHandlerTest
         repositoryMock = new Mock<IServiceRepository>();
         userContextMock = new Mock<IUserContext>();
         pubSubMock = new Mock<IPubSub>();
-        handler = new RemoveActionCommandHandler(repositoryMock.Object, userContextMock.Object, pubSubMock.Object);
+        handler = new RemoveActionCommandHandler(repositoryMock.Object, userContextMock.Object, pubSubMock.Object, Mock.Of<CodeDesignPlus.Net.Cache.Abstractions.ICacheManager>());
     }
 
     [Fact]

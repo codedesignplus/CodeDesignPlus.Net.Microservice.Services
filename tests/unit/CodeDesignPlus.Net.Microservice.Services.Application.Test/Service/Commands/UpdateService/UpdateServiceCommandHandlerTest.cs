@@ -16,7 +16,7 @@ public class UpdateServiceCommandHandlerTest
         repositoryMock = new Mock<IServiceRepository>();
         userContextMock = new Mock<IUserContext>();
         pubSubMock = new Mock<IPubSub>();
-        handler = new UpdateServiceCommandHandler(repositoryMock.Object, userContextMock.Object, pubSubMock.Object);
+        handler = new UpdateServiceCommandHandler(repositoryMock.Object, userContextMock.Object, pubSubMock.Object, Mock.Of<CodeDesignPlus.Net.Cache.Abstractions.ICacheManager>());
     }
 
     [Fact]

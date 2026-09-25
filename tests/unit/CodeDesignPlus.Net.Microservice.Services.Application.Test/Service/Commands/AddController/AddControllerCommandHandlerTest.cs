@@ -20,7 +20,7 @@ public class AddControllerCommandHandlerTest
         repositoryMock = new Mock<IServiceRepository>();
         userContextMock = new Mock<IUserContext>();
         pubSubMock = new Mock<IPubSub>();
-        handler = new AddControllerCommandHandler(repositoryMock.Object, userContextMock.Object, pubSubMock.Object);
+        handler = new AddControllerCommandHandler(repositoryMock.Object, userContextMock.Object, pubSubMock.Object, Mock.Of<CodeDesignPlus.Net.Cache.Abstractions.ICacheManager>());
     }
 
     [Fact]

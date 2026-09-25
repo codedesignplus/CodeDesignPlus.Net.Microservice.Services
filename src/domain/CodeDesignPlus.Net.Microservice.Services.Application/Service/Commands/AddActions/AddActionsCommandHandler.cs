@@ -1,6 +1,6 @@
 namespace CodeDesignPlus.Net.Microservice.Services.Application.Service.Commands.AddActions;
 
-public class AddActionsCommandHandler(IServiceRepository repository, IUserContext user, IPubSub pubsub) : IRequestHandler<AddActionsCommand>
+public class AddActionsCommandHandler(IServiceRepository repository, IUserContext user, IPubSub pubsub, ICacheManager cacheManager) : IRequestHandler<AddActionsCommand>
 {
     public async Task Handle(AddActionsCommand request, CancellationToken cancellationToken)
     {
@@ -18,6 +18,9 @@ public class AddActionsCommandHandler(IServiceRepository repository, IUserContex
         }
 
         await repository.UpdateAsync(service, cancellationToken);
+
+        // El detalle se cachea en GetServiceById: sin esto se sirve la version anterior (pendings/018).
+        await cacheManager.RemoveAsync(service.Id.ToString());
 
         await pubsub.PublishAsync(service.GetAndClearEvents(), cancellationToken);
     }
