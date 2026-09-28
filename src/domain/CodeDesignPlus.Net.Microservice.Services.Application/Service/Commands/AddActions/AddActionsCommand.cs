@@ -22,7 +22,7 @@ public class ActionDtoValidator : AbstractValidator<ActionDto>
     public ActionDtoValidator()
     {
         RuleFor(x => x.Id).NotEmpty().NotNull();
-        RuleFor(x => x.Name).NotEmpty().NotNull().MaximumLength(128);
+        RuleFor(x => x.Name).NotEmpty().NotNull().MaximumLength(FieldLength.Name);
         RuleFor(x => x.HttpMethod).NotEqual(Domain.Enums.HttpMethod.None);
     }
 }

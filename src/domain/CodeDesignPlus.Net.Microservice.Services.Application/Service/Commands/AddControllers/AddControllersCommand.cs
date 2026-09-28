@@ -18,6 +18,6 @@ public class ControllerDtoValidator : AbstractValidator<ControllerDto>
     public ControllerDtoValidator()
     {
         RuleFor(x => x.Id).NotEmpty().NotNull();
-        RuleFor(x => x.Name).NotEmpty().NotNull().MaximumLength(128);
+        RuleFor(x => x.Name).NotEmpty().NotNull().MaximumLength(FieldLength.Name);
     }
 }

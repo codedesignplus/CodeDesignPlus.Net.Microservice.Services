@@ -9,7 +9,7 @@ public class Validator : AbstractValidator<UpdateControllerCommand>
     {
         RuleFor(x => x.IdService).NotEmpty().NotNull();
         RuleFor(x => x.IdController).NotEmpty().NotNull();
-        RuleFor(x => x.Name).NotEmpty().NotNull().MaximumLength(128);
-        RuleFor(x => x.Description).NotEmpty().NotNull().MaximumLength(512);
+        RuleFor(x => x.Name).NotEmpty().NotNull().MaximumLength(FieldLength.Name);
+        RuleFor(x => x.Description).NotEmpty().NotNull().MaximumLength(FieldLength.Description);
     }
 }

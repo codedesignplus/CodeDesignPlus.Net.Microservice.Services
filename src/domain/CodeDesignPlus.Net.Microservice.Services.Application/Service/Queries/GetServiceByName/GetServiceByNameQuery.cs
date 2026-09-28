@@ -6,7 +6,7 @@ public class Validator : AbstractValidator<GetServiceByNameQuery>
 {
     public Validator()
     {
-        RuleFor(x => x.Name).NotEmpty().MaximumLength(64);
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(FieldLength.Name);
     }
 }
 
