@@ -34,7 +34,7 @@ builder.Services.AddVault(builder.Configuration);
 builder.Services.AddMapster();
 CodeDesignPlus.Net.Microservice.Services.gRpc.Core.Mapster.MapsterConfig.Configure();
 builder.Services.AddMediatR<CodeDesignPlus.Net.Microservice.Services.Application.Startup>();
-builder.Services.AddFluentValidation();
+builder.Services.AddFluentValidation<CodeDesignPlus.Net.Microservice.Services.Application.Startup>();
 
 builder.Services.AddMongo<CodeDesignPlus.Net.Microservice.Services.Infrastructure.Startup>(builder.Configuration);
 builder.Services.AddRedis(builder.Configuration);
