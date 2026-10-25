@@ -19,4 +19,19 @@ public class ServiceRepository(IServiceProvider serviceProvider, IOptions<MongoO
 
         return service;
     }
+
+    /// <inheritdoc />
+    public async Task<bool> CreateIfAbsentAsync(ServiceAggregate service, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await CreateAsync(service, cancellationToken);
+
+            return true;
+        }
+        catch (MongoWriteException exception) when (exception.WriteError?.Category == ServerErrorCategory.DuplicateKey)
+        {
+            return false;
+        }
+    }
 }

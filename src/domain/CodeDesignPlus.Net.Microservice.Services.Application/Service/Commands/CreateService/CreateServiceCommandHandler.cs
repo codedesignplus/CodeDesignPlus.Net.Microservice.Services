@@ -6,13 +6,15 @@ public class CreateServiceCommandHandler(IServiceRepository repository, IUserCon
     {
         ApplicationGuard.IsNull(request, Errors.InvalidRequest);
 
-        var exist = await repository.ExistsAsync<ServiceAggregate>(request.Id, cancellationToken);
-
-        ApplicationGuard.IsTrue(exist, Errors.ServiceAlreadyExists);
+        // Ya guardado por un envío anterior del mismo formulario: el reintento termina bien sin repetir nada (pendings/589).
+        if (await repository.ExistsAsync<ServiceAggregate>(request.Id, cancellationToken))
+            return;
 
         var service = ServiceAggregate.Create(request.Id, request.Name, request.Description, user.IsAuthenticated ? user.IdUser : Guid.Empty);
 
-        await repository.CreateAsync(service, cancellationToken);
+        // Dos envíos que llegan a la vez pasan los dos la comprobación de arriba; el segundo choca contra el id y no publica.
+        if (!await repository.CreateIfAbsentAsync(service, cancellationToken))
+            return;
 
         // El detalle se cachea en GetServiceById: sin esto se sirve la version anterior (pendings/018).
         await cacheManager.RemoveAsync(service.Id.ToString());

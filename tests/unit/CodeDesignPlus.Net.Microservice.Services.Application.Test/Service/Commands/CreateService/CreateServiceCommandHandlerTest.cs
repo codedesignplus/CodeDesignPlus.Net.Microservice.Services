@@ -36,7 +36,7 @@ public class CreateServiceCommandHandlerTest
     }
 
     [Fact]
-    public async Task Handle_ServiceAlreadyExists_ThrowsServiceAlreadyExistsException()
+    public async Task Handle_ServiceAlreadyExists_IsTheRetryAndDoesNotCreateItAgain()
     {
         // Arrange
         var request = new CreateServiceCommand(Guid.NewGuid(), "Test Service", "Test Description");
@@ -44,12 +44,11 @@ public class CreateServiceCommandHandlerTest
 
         repositoryMock.Setup(x => x.ExistsAsync<ServiceAggregate>(request.Id, cancellationToken)).ReturnsAsync(true);
 
-        // Act & Assert
-        var exception = await Assert.ThrowsAsync<CodeDesignPlusException>(() => handler.Handle(request, cancellationToken));
+        // Act: el mismo id es el reintento del mismo formulario (pendings/589, regla 66), no un error.
+        await handler.Handle(request, cancellationToken);
 
-        Assert.Equal(Errors.ServiceAlreadyExists.GetCode(), exception.Code);
-        Assert.Equal(Errors.ServiceAlreadyExists.GetMessage(), exception.Message);
-        Assert.Equal(Layer.Application, exception.Layer);
+        // Assert
+        repositoryMock.Verify(x => x.CreateIfAbsentAsync(It.IsAny<ServiceAggregate>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -68,7 +67,7 @@ public class CreateServiceCommandHandlerTest
         await handler.Handle(request, cancellationToken);
 
         // Assert
-        repositoryMock.Verify(x => x.CreateAsync(It.IsAny<ServiceAggregate>(), cancellationToken), Times.Once);
+        repositoryMock.Verify(x => x.CreateIfAbsentAsync(It.IsAny<ServiceAggregate>(), cancellationToken), Times.Once);
         pubSubMock.Verify(x => x.PublishAsync(It.IsAny<List<ServiceCreatedDomainEvent>>(), cancellationToken), Times.AtMostOnce);
     }
 }
