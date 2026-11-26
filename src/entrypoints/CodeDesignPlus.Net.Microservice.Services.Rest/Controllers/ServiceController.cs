@@ -1,3 +1,6 @@
+using CodeDesignPlus.Net.Core.Abstractions.Models.Pager;
+using CodeDesignPlus.Net.Microservice.Services.Application.Service.DataTransferObjects;
+
 namespace CodeDesignPlus.Net.Microservice.Services.Rest.Controllers;
 
 /// <summary>
@@ -16,6 +19,7 @@ public class ServiceController(IMediator mediator, IMapper mapper) : ControllerB
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Collection of Services.</returns>
     [HttpGet]
+    [ProducesResponseType<Pagination<ServiceDto>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetServices([FromQuery] C.Criteria criteria, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetAllServiceQuery(criteria), cancellationToken);
@@ -30,6 +34,7 @@ public class ServiceController(IMediator mediator, IMapper mapper) : ControllerB
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The Service.</returns>
     [HttpGet("{id}")]
+    [ProducesResponseType<ServiceDto>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetServiceById(Guid id, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetServiceByIdQuery(id), cancellationToken);
